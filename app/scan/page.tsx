@@ -2,12 +2,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Scanner } from "@/components/Scanner";
 import { parseVerificationUrl } from "@/lib/parseVerificationUrl";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 
-export default function ScanPage() {
+function ScanPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const modeParam = (searchParams.get("mode") as "mock" | "onchain") || "mock";
@@ -66,6 +67,23 @@ export default function ScanPage() {
 
       <Scanner mode={modeParam} onScan={handleScan} />
     </main>
+  );
+}
+
+export default function ScanPage() {
+  return (
+    <Suspense fallback={
+      <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 px-4 py-6">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Logo size="sm" showText={false} />
+            <h1 className="text-lg font-semibold text-slate-50">Loading...</h1>
+          </div>
+        </div>
+      </main>
+    }>
+      <ScanPageContent />
+    </Suspense>
   );
 }
 

@@ -2,7 +2,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { VerificationCard } from "@/components/VerificationCard";
 import { useReadContract } from "wagmi";
 import { base } from "wagmi/chains";
@@ -39,7 +39,7 @@ type MockResponse = {
   txHash: string;
 };
 
-export default function ResultPage() {
+function ResultPageContent() {
   const searchParams = useSearchParams();
   const mode = (searchParams.get("mode") ||
     "invalid") as "mock" | "onchain" | "invalid";
@@ -143,6 +143,20 @@ export default function ResultPage() {
         network={chain === "base" ? "Base Mainnet" : chain}
       />
     </main>
+  );
+}
+
+export default function ResultPage() {
+  return (
+    <Suspense fallback={
+      <main className="flex min-h-screen items-center justify-center px-4 py-8">
+        <div className="rounded-3xl border border-slate-700 bg-slate-950/80 p-6 text-sm text-slate-300">
+          Loading...
+        </div>
+      </main>
+    }>
+      <ResultPageContent />
+    </Suspense>
   );
 }
 
