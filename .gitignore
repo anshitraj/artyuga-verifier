@@ -43,3 +43,10 @@ artifacts/
 typechain-types/
 coverage/
 coverage.json
+
+# old vite/react-router code (not used in Next.js)
+/src/
+/vite.config.ts
+/index.html
+/tsconfig.app.json
+/tsconfig.node.json
