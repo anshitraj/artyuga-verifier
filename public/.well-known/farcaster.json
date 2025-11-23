@@ -4,40 +4,24 @@
     "payload": "eyJkb21haW4iOiJ2ZXJpZnkuYXJ0eXVnLmFydCJ9",
     "signature": "6KuxLwpMS8s68mPbkFQC3HNE83EH6Rg1wIoDsT1qXsI1TVufnvbhFXHp/MVF3DNzoii4uXukOp9a3YNMcr4bkBw="
   },
+  "baseBuilder": {
+    "ownerAddress": "0x..."
+  },
   "miniapp": {
-    "version": "1.0.0",
+    "version": "1",
     "name": "Artyuga Verifier",
-    "iconUrl": "https://verify.artyug.art/icon.png",
     "homeUrl": "https://verify.artyug.art",
-    "imageUrl": "https://verify.artyug.art/og-image.png",
-    "buttonTitle": "Verify Artwork",
+    "iconUrl": "https://verify.artyug.art/icon.png",
     "splashImageUrl": "https://verify.artyug.art/splash.png",
     "splashBackgroundColor": "#0f172a",
-    "webhookUrl": "https://verify.artyug.art/api/webhook"
-  },
-  "chains": [
-    {
-      "id": 8453,
-      "name": "Base",
-      "rpcUrl": "https://mainnet.base.org"
-    },
-    {
-      "id": 84532,
-      "name": "Base Sepolia",
-      "rpcUrl": "https://sepolia.base.org"
-    }
-  ],
-  "permissions": [
-    "camera",
-    "wallet"
-  ],
-  "description": "Verify artwork ownership and authenticity on Base blockchain. Scan QR codes or NFC tags to instantly confirm NFT provenance.",
-  "tags": [
-    "art",
-    "nft",
-    "verification",
-    "base",
-    "blockchain"
-  ]
+    "subtitle": "Verify NFT authenticity",
+    "description": "Verify artwork ownership and authenticity on Base blockchain. Scan QR codes or NFC tags to instantly confirm NFT provenance.",
+    "primaryCategory": "art-creativity",
+    "tags": ["art", "nft", "verification", "base", "blockchain"],
+    "heroImageUrl": "https://verify.artyug.art/og-image.png",
+    "tagline": "Authenticate artworks",
+    "ogTitle": "Artyuga Verifier",
+    "ogDescription": "Verify artwork ownership and authenticity on Base blockchain.",
+    "ogImageUrl": "https://verify.artyug.art/og-image.png"
+  }
 }
-
