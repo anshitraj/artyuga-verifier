@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "farcaster-verify",
-    "payload": "YOUR_PAYLOAD_HERE",
-    "signature": "YOUR_SIGNATURE_HERE"
+    "header": "eyJmaWQiOjE0MTkxOTAsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwRGNlNWM5NTJhNDEyNDU4YjZkNDcxMDVBMzFDQzkxMzc4RUQyNGYxIn0",
+    "payload": "eyJkb21haW4iOiJ2ZXJpZnkuYXJ0eXVnLmFydCJ9",
+    "signature": "6KuxLwpMS8s68mPbkFQC3HNE83EH6Rg1wIoDsT1qXsI1TVufnvbhFXHp/MVF3DNzoii4uXukOp9a3YNMcr4bkBw="
   },
   "miniapp": {
     "version": "1.0.0",
