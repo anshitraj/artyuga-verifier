@@ -145,8 +145,7 @@ export const Scanner = ({ mode, onScan, onClose }: ScannerProps) => {
       // @ts-ignore - NDEFReader is experimental
       const reader = new NDEFReader();
       
-      toast.info('Tap your phone to the NFC tag...', { duration: 5000 });
-      
+      // Set up event handlers BEFORE calling scan()
       // @ts-ignore
       reader.onreading = (event: NDEFReadingEvent) => {
         const decoder = new TextDecoder();
@@ -161,8 +160,10 @@ export const Scanner = ({ mode, onScan, onClose }: ScannerProps) => {
               foundUrl = true;
               break;
             } else if (record.recordType === 'url') {
-              // Handle URL records
-              const url = decoder.decode(record.data);
+              // Handle URL records - decode properly
+              const urlData = record.data;
+              // URL records have a prefix byte, skip it
+              const url = decoder.decode(urlData.slice(1));
               onScan(url);
               toast.success('NFC tag detected!');
               foundUrl = true;
@@ -184,20 +185,36 @@ export const Scanner = ({ mode, onScan, onClose }: ScannerProps) => {
       // @ts-ignore
       reader.onreadingerror = (error: Error) => {
         console.error('NFC reading error:', error);
-        toast.error('Error reading NFC tag. Please try again.');
+        // Don't show error toast on readingerror - it's often just "no tag found yet"
+        // Only show error if it's a permission or critical error
+        if (error.name === 'NotAllowedError' || error.name === 'SecurityError') {
+          toast.error('NFC permission denied. Please allow NFC access in your browser settings.');
+        }
       };
       
+      // Request permission and start scanning
+      // The scan() call itself requests permission
+      toast.info('Tap your phone to the NFC tag...', { duration: 8000 });
       await reader.scan();
+      
+      // If we get here, scanning started successfully
+      // The onreading handler will be called when a tag is detected
     } catch (error: any) {
       console.error('NFC scan error:', error);
-      if (error.name === 'NotAllowedError') {
-        toast.error('NFC permission denied. Please allow NFC access.');
+      
+      // Handle specific error types
+      if (error.name === 'NotAllowedError' || error.name === 'SecurityError') {
+        toast.error('NFC permission denied. Please allow NFC access in your browser settings and try again.', {
+          duration: 6000,
+        });
       } else if (error.name === 'NotSupportedError') {
-        toast.error('NFC is not supported on this device');
-      } else if (error.message?.includes('not available')) {
+        toast.error('NFC is not supported on this device or browser');
+      } else if (error.name === 'NotReadableError') {
         toast.error('NFC is not available. Make sure NFC is enabled on your device.');
+      } else if (error.message?.includes('not available') || error.message?.includes('NFC')) {
+        toast.error('NFC is not available. Make sure NFC is enabled on your device and try again.');
       } else {
-        toast.error('Failed to initialize NFC reader. Please try again.');
+        toast.error(`Failed to start NFC reader: ${error.message || 'Unknown error'}. Please try again.`);
       }
     }
   };
