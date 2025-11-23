@@ -36,25 +36,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="bg-slate-950 overflow-x-hidden">
       <head>
-        {/* BASE MINI APP REQUIRED META */}
+        {/* Base Mini App Required */}
         <meta property="og:card" content="app" />
         
-        {/* Force inject in hydration as well */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const meta = document.querySelector('meta[property="og:card"]');
-                if (!meta) {
-                  const m = document.createElement('meta');
-                  m.setAttribute('property', 'og:card');
-                  m.setAttribute('content', 'app');
-                  document.head.appendChild(m);
-                }
-              })();
-            `,
-          }}
-        />
+        {/* Other OG Tags - Added directly for SSR (Base bot doesn't execute JS) */}
+        <meta property="og:title" content="Artyuga Verifier" />
+        <meta property="og:description" content="Scan QR or NFC to verify artwork authenticity on Base." />
+        <meta property="og:image" content="https://verify.artyug.art/icon.png" />
+        <meta property="og:url" content="https://verify.artyug.art" />
+        <meta property="og:type" content="website" />
       </head>
       <body className={`${inter.className} overflow-x-hidden`}>
         <Providers>
