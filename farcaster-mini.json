@@ -1,0 +1,43 @@
+{
+  "accountAssociation": {
+    "header": "farcaster-verify",
+    "payload": "YOUR_PAYLOAD_HERE",
+    "signature": "YOUR_SIGNATURE_HERE"
+  },
+  "miniapp": {
+    "version": "1.0.0",
+    "name": "Artyuga Verifier",
+    "iconUrl": "https://artyuga.app/icon.png",
+    "homeUrl": "https://artyuga.app",
+    "imageUrl": "https://artyuga.app/og-image.png",
+    "buttonTitle": "Verify Artwork",
+    "splashImageUrl": "https://artyuga.app/splash.png",
+    "splashBackgroundColor": "#0f172a",
+    "webhookUrl": "https://artyuga.app/api/webhook"
+  },
+  "chains": [
+    {
+      "id": 8453,
+      "name": "Base",
+      "rpcUrl": "https://mainnet.base.org"
+    },
+    {
+      "id": 84532,
+      "name": "Base Sepolia",
+      "rpcUrl": "https://sepolia.base.org"
+    }
+  ],
+  "permissions": [
+    "camera",
+    "wallet"
+  ],
+  "description": "Verify artwork ownership and authenticity on Base blockchain. Scan QR codes or NFC tags to instantly confirm NFT provenance.",
+  "tags": [
+    "art",
+    "nft",
+    "verification",
+    "base",
+    "blockchain"
+  ]
+}
+
