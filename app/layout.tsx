@@ -7,8 +7,29 @@ import { Providers } from "@/components/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Artyug Verifier",
-  description: "Verify Artyug artworks on Base using QR or NFC.",
+  title: "Artyuga Verifier",
+  description: "Scan QR or NFC to verify artwork authenticity on Base.",
+  metadataBase: new URL("https://verify.artyug.art"),
+  openGraph: {
+    title: "Artyuga Verifier",
+    description: "Scan QR or NFC to verify artwork authenticity on Base.",
+    images: [
+      {
+        url: "https://verify.artyug.art/icon.png",
+        width: 1024,
+        height: 1024,
+        alt: "Artyuga Verifier",
+      },
+    ],
+    url: "https://verify.artyug.art",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Artyuga Verifier",
+    description: "Scan QR or NFC to verify artwork authenticity on Base.",
+    images: ["https://verify.artyug.art/icon.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

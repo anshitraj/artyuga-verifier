@@ -68,6 +68,15 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'max-age=0',
+          },
+        ],
+      },
     ];
   },
   webpack: (config, { isServer, webpack }) => {
