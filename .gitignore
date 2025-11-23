@@ -9,9 +9,10 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
+# vite
+/dist
+/dist-ssr
+*.local
 
 # production
 /build
@@ -35,6 +36,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# next.js (old, not used anymore)
+/.next/
+/out/
 next-env.d.ts
 
 # hardhat
@@ -43,10 +48,3 @@ artifacts/
 typechain-types/
 coverage/
 coverage.json
-
-# old vite/react-router code (not used in Next.js)
-/src/
-/vite.config.ts
-/index.html
-/tsconfig.app.json
-/tsconfig.node.json
