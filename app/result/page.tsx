@@ -102,64 +102,80 @@ function ResultPageContent() {
 
   if (mode === "invalid") {
     return (
-      <main className="flex min-h-screen items-center justify-center px-4 py-8">
-        <VerificationCard
-          mode="invalid"
-          rawUrl={rawUrl}
-          reasonInvalid={reasonInvalid || "Invalid or unsupported QR / NFC data"}
-        />
-      </main>
+      <div className="w-full max-w-full overflow-x-hidden">
+        <main className="flex min-h-[100vh] items-center justify-center px-4 sm:px-6 py-6 sm:py-8 pb-24">
+          <div className="max-w-[500px] w-full mx-auto">
+            <VerificationCard
+              mode="invalid"
+              rawUrl={rawUrl}
+              reasonInvalid={reasonInvalid || "Invalid or unsupported QR / NFC data"}
+            />
+          </div>
+        </main>
+      </div>
     );
   }
 
   if (mode === "mock") {
     return (
-      <main className="flex min-h-screen items-center justify-center px-4 py-8">
-        {mockLoading || !mockData ? (
-          <div className="rounded-3xl border border-slate-700 bg-slate-950/80 p-6 text-sm text-slate-300">
-            Loading mock verification…
+      <div className="w-full max-w-full overflow-x-hidden">
+        <main className="flex min-h-[100vh] items-center justify-center px-4 sm:px-6 py-6 sm:py-8 pb-24">
+          <div className="max-w-[500px] w-full mx-auto">
+            {mockLoading || !mockData ? (
+              <div className="rounded-2xl sm:rounded-3xl border border-slate-700 bg-slate-950/80 p-4 sm:p-6 text-sm sm:text-base text-slate-300">
+                Loading mock verification…
+              </div>
+            ) : (
+              <VerificationCard
+                mode="mock"
+                rawUrl={rawUrl}
+                title={mockData.title}
+                artist={mockData.artist}
+                shopName={mockData.shopName}
+                owner={mockData.owner}
+                network={mockData.network}
+                txHash={mockData.txHash}
+              />
+            )}
           </div>
-        ) : (
-          <VerificationCard
-            mode="mock"
-            rawUrl={rawUrl}
-            title={mockData.title}
-            artist={mockData.artist}
-            shopName={mockData.shopName}
-            owner={mockData.owner}
-            network={mockData.network}
-            txHash={mockData.txHash}
-          />
-        )}
-      </main>
+        </main>
+      </div>
     );
   }
 
   // ONCHAIN
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-8">
-      <VerificationCard
-        mode="onchain"
-        rawUrl={rawUrl}
-        title={`Token #${tokenIdParam}`}
-        artist={undefined}
-        owner={ownerOnchain as string | undefined}
-        contract={contract}
-        tokenId={tokenIdParam}
-        network={chain === "base" ? "Base Mainnet" : chain}
-      />
-    </main>
+    <div className="w-full max-w-full overflow-x-hidden">
+      <main className="flex min-h-[100vh] items-center justify-center px-4 sm:px-6 py-6 sm:py-8 pb-24">
+        <div className="max-w-[500px] w-full mx-auto">
+          <VerificationCard
+            mode="onchain"
+            rawUrl={rawUrl}
+            title={`Token #${tokenIdParam}`}
+            artist={undefined}
+            owner={ownerOnchain as string | undefined}
+            contract={contract}
+            tokenId={tokenIdParam}
+            network={chain === "base" ? "Base Mainnet" : chain}
+          />
+        </div>
+      </main>
+    </div>
   );
 }
 
 export default function ResultPage() {
   return (
     <Suspense fallback={
-      <main className="flex min-h-screen items-center justify-center px-4 py-8">
-        <div className="rounded-3xl border border-slate-700 bg-slate-950/80 p-6 text-sm text-slate-300">
-          Loading...
-        </div>
-      </main>
+      <div className="w-full max-w-full overflow-x-hidden">
+        <main className="flex min-h-[100vh] items-center justify-center px-4 sm:px-6 py-6 sm:py-8 pb-24">
+          <div className="max-w-[500px] w-full mx-auto">
+            <div className="rounded-2xl sm:rounded-3xl border border-slate-700 bg-slate-950/80 p-4 sm:p-6 text-sm sm:text-base text-slate-300">
+              Loading...
+            </div>
+          </div>
+        </main>
+      </div>
     }>
       <ResultPageContent />
     </Suspense>

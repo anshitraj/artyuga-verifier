@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="bg-slate-950">
-      <body className={inter.className}>
+    <html lang="en" className="bg-slate-950 overflow-x-hidden">
+      <body className={`${inter.className} overflow-x-hidden`}>
         <Providers>
-          <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 text-slate-50">
+          <div className="min-h-[100vh] bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 text-slate-50 overflow-x-hidden">
             {children}
           </div>
         </Providers>

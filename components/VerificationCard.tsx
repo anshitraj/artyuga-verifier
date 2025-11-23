@@ -49,19 +49,19 @@ export function VerificationCard(info: BaseInfo) {
       : null;
 
   return (
-    <div className="mx-auto max-w-xl rounded-3xl border border-purple-500/50 bg-slate-950/80 p-6 shadow-xl shadow-purple-900/40">
-      <div className="mb-4 flex items-center gap-3">
+    <div className="mx-auto max-w-full w-full rounded-2xl sm:rounded-3xl border border-purple-500/50 bg-slate-950/80 p-4 sm:p-6">
+      <div className="mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
         {isValid ? (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20">
-            <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-emerald-500/20 flex-shrink-0">
+            <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-400" />
           </div>
         ) : (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/20">
-            <AlertTriangle className="h-6 w-6 text-amber-400" />
+          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-amber-500/20 flex-shrink-0">
+            <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400" />
           </div>
         )}
-        <div>
-          <h2 className="text-lg font-semibold text-slate-50">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-50">
             {isValid ? "Artwork Verified" : "Verification Failed"}
           </h2>
           <p className="text-xs text-slate-400">
@@ -70,7 +70,7 @@ export function VerificationCard(info: BaseInfo) {
         </div>
       </div>
 
-      <div className="space-y-2 text-sm text-slate-100">
+      <div className="space-y-2 text-xs sm:text-sm text-slate-100">
         <Row label="Title" value={info.title || "Unknown artwork"} />
         {info.shopName && <Row label="Shop" value={info.shopName} />}
         <Row label="Artist" value={info.artist || "Unknown artist"} />
@@ -90,28 +90,28 @@ export function VerificationCard(info: BaseInfo) {
         )}
       </div>
 
-      <div className="mt-4 space-y-2">
+      <div className="mt-3 sm:mt-4 space-y-2">
         {basescanUrl && (
           <a
             href={basescanUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-800 py-2 text-sm font-medium text-slate-50 hover:bg-slate-700"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg sm:rounded-xl bg-slate-800 py-3 sm:py-3 md:py-4 text-xs sm:text-sm font-medium text-slate-50 hover:bg-slate-700 transition-colors"
           >
             View on BaseScan
-            <ExternalLink className="h-4 w-4" />
+            <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
           </a>
         )}
         <button
           onClick={handleShare}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-purple-500/60 bg-slate-950 py-2 text-sm font-medium text-purple-100 hover:bg-purple-900/40"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg sm:rounded-xl border border-purple-500/60 bg-slate-950 py-3 sm:py-3 md:py-4 text-xs sm:text-sm font-medium text-purple-100 hover:bg-purple-900/40 transition-colors"
         >
-          <Share2 className="h-4 w-4" />
+          <Share2 className="h-3 w-3 sm:h-4 sm:w-4" />
           Share Verification
         </button>
       </div>
 
-      <p className="mt-4 truncate text-[10px] text-slate-500">
+      <p className="mt-3 sm:mt-4 truncate text-[10px] text-slate-500 break-all">
         Raw: {info.rawUrl}
       </p>
     </div>
@@ -120,9 +120,9 @@ export function VerificationCard(info: BaseInfo) {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between gap-4">
-      <span className="text-xs text-slate-400">{label}</span>
-      <span className="text-xs font-mono text-slate-100">{value}</span>
+    <div className="flex justify-between gap-2 sm:gap-4">
+      <span className="text-xs text-slate-400 flex-shrink-0">{label}</span>
+      <span className="text-xs font-mono text-slate-100 text-right break-all min-w-0 flex-1">{value}</span>
     </div>
   );
 }

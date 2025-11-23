@@ -20,7 +20,7 @@ export function WalletStatus() {
     return (
       <button
         onClick={() => connect({ connector: primary })}
-        className="rounded-xl bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500"
+        className="rounded-lg sm:rounded-xl bg-purple-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-white hover:bg-purple-500 transition-colors w-full sm:w-auto"
         disabled={isPending}
       >
         {isPending ? "Connecting..." : "Connect Wallet"}
@@ -29,22 +29,22 @@ export function WalletStatus() {
   }
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-xs">
-      <div className="flex flex-col">
-        <span className="font-mono text-slate-100">
+    <div className="flex items-center gap-2 sm:gap-3 rounded-lg sm:rounded-xl border border-slate-700 bg-slate-900/70 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs w-full sm:w-auto">
+      <div className="flex flex-col min-w-0 flex-1">
+        <span className="font-mono text-slate-100 truncate">
           {address?.slice(0, 6)}...{address?.slice(-4)}
         </span>
-        <span className="text-[10px] text-slate-400">
+        <span className="text-[9px] sm:text-[10px] text-slate-400">
           Chain: {chainId === base.id ? "Base" : `Other (${chainId})`}
         </span>
       </div>
-      <div className="flex flex-col items-end">
-        <span className="text-[11px] text-slate-300">
+      <div className="flex flex-col items-end flex-shrink-0">
+        <span className="text-[10px] sm:text-[11px] text-slate-300">
           Balance: {balance ? `${balance.formatted.slice(0, 6)} ${balance.symbol}` : "—"}
         </span>
         <button
           onClick={() => disconnect()}
-          className="text-[10px] text-slate-400 hover:text-slate-200"
+          className="text-[9px] sm:text-[10px] text-slate-400 hover:text-slate-200 transition-colors"
         >
           Disconnect
         </button>

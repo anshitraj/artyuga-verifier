@@ -258,11 +258,11 @@ export function Scanner({ mode, onScan }: ScannerProps) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-2xl border border-purple-500/40 bg-slate-900/60 p-4">
-        <div className="mb-3 flex items-center justify-between gap-2 text-sm text-purple-200">
+    <div className="space-y-3 sm:space-y-4 w-full">
+      <div className="rounded-xl sm:rounded-2xl border border-purple-500/40 bg-slate-900/60 p-3 sm:p-4 w-full">
+        <div className="mb-2 sm:mb-3 flex items-center justify-between gap-2 text-xs sm:text-sm text-purple-200">
           <div className="flex items-center gap-2">
-            <Camera className="h-4 w-4" />
+            <Camera className="h-3 w-3 sm:h-4 sm:w-4" />
             <span>Scan {mode === "mock" ? "demo" : "onchain"} QR</span>
           </div>
           {scanning && (
@@ -274,13 +274,13 @@ export function Scanner({ mode, onScan }: ScannerProps) {
             </button>
           )}
         </div>
-        <div className="aspect-square overflow-hidden rounded-xl bg-black relative">
+        <div className="aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-black relative w-full">
           <div id={scannerId.current} className="w-full h-full" />
           {!scanning && (
             <div className="absolute inset-0 flex items-center justify-center">
               <button
                 onClick={startQrScan}
-                className="rounded-xl bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-500"
+                className="rounded-xl bg-purple-600 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium text-white hover:bg-purple-500 transition-colors"
               >
                 Start Camera
               </button>
@@ -289,13 +289,13 @@ export function Scanner({ mode, onScan }: ScannerProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-700 bg-slate-900/60 p-4 space-y-3">
-        <div className="flex items-center gap-2 text-sm text-slate-200">
-          <Keyboard className="h-4 w-4" />
+      <div className="rounded-xl sm:rounded-2xl border border-slate-700 bg-slate-900/60 p-3 sm:p-4 space-y-2 sm:space-y-3 w-full">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200">
+          <Keyboard className="h-3 w-3 sm:h-4 sm:w-4" />
           <span>Or paste NFC / QR URL manually</span>
         </div>
         <textarea
-          className="w-full rounded-xl border border-slate-700 bg-slate-950/80 p-2 text-sm text-slate-100 outline-none focus:border-purple-500"
+          className="w-full rounded-lg sm:rounded-xl border border-slate-700 bg-slate-950/80 p-2 sm:p-3 text-xs sm:text-sm text-slate-100 outline-none focus:border-purple-500 resize-none"
           rows={3}
           placeholder="Paste something like https://artyuga-demo.xyz/verify/mock?shopId=1&artId=3"
           value={manual}
@@ -303,25 +303,25 @@ export function Scanner({ mode, onScan }: ScannerProps) {
         />
         <button
           onClick={handleManualSubmit}
-          className="w-full rounded-xl bg-purple-600 py-2 text-sm font-medium text-white hover:bg-purple-500"
+          className="w-full rounded-lg sm:rounded-xl bg-purple-600 py-3 sm:py-3 md:py-4 text-xs sm:text-sm font-medium text-white hover:bg-purple-500 transition-colors"
         >
           Verify manually
         </button>
       </div>
 
-      <div className="rounded-2xl border border-slate-700 bg-slate-900/60 p-4 space-y-2">
-        <div className="flex items-center gap-2 text-sm text-slate-200">
-          <Nfc className="h-4 w-4" />
+      <div className="rounded-xl sm:rounded-2xl border border-slate-700 bg-slate-900/60 p-3 sm:p-4 space-y-2 w-full">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200">
+          <Nfc className="h-3 w-3 sm:h-4 sm:w-4" />
           <span>Scan NFC tag (beta)</span>
         </div>
         <button
           onClick={handleNfcScan}
-          className="w-full rounded-xl border border-purple-500/60 py-2 text-sm font-medium text-purple-100 hover:bg-purple-900/30"
+          className="w-full rounded-lg sm:rounded-xl border border-purple-500/60 py-3 sm:py-3 md:py-4 text-xs sm:text-sm font-medium text-purple-100 hover:bg-purple-900/30 transition-colors"
         >
           Start NFC scan
         </button>
         {nfcStatus && (
-          <p className="text-xs text-slate-400 mt-1 min-h-[1.5rem]">{nfcStatus}</p>
+          <p className="text-xs text-slate-400 mt-1 min-h-[1.5rem] break-words">{nfcStatus}</p>
         )}
       </div>
     </div>
