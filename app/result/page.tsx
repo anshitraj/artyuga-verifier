@@ -6,6 +6,7 @@ import { useEffect, useState, Suspense } from "react";
 import { VerificationCard } from "@/components/VerificationCard";
 import { useReadContract } from "wagmi";
 import { base } from "wagmi/chains";
+import { sdk } from "@farcaster/miniapp-sdk";
 
 // Minimal ERC721 ABI for ownerOf + tokenURI
 const ERC721_ABI = [
@@ -40,6 +41,11 @@ type MockResponse = {
 };
 
 function ResultPageContent() {
+  useEffect(() => {
+    // Tell Base/Farcaster that the app is ready
+    sdk.actions.ready();
+  }, []);
+
   const searchParams = useSearchParams();
   const mode = (searchParams.get("mode") ||
     "invalid") as "mock" | "onchain" | "invalid";

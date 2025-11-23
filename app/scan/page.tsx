@@ -1,14 +1,20 @@
 // app/scan/page.tsx
 "use client";
 
+import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Scanner } from "@/components/Scanner";
 import { parseVerificationUrl } from "@/lib/parseVerificationUrl";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { sdk } from "@farcaster/miniapp-sdk";
 
 function ScanPageContent() {
+  useEffect(() => {
+    // Tell Base/Farcaster that the app is ready
+    sdk.actions.ready();
+  }, []);
   const searchParams = useSearchParams();
   const router = useRouter();
   const modeParam = (searchParams.get("mode") as "mock" | "onchain") || "mock";

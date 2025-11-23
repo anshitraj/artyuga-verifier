@@ -1,12 +1,18 @@
 // app/page.tsx
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { WalletStatus } from "@/components/WalletStatus";
 import { QRCodeSVG } from "qrcode.react";
 import { Logo } from "@/components/Logo";
+import { sdk } from "@farcaster/miniapp-sdk";
 
 export default function HomePage() {
+  useEffect(() => {
+    // Tell Base/Farcaster that the app is ready
+    sdk.actions.ready();
+  }, []);
   const demoMockUrl =
     "https://artyuga-demo.xyz/verify/mock?shopId=1&artId=3";
   const demoOnchainUrl =

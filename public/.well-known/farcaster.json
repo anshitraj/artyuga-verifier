@@ -12,7 +12,7 @@
     "name": "Artyuga Verifier",
     "homeUrl": "https://verify.artyug.art",
     "iconUrl": "https://verify.artyug.art/icon.png",
-    "splashImageUrl": "https://verify.artyug.art/splash.png",
+    "splashImageUrl": "https://verify.artyug.art/splash.svg",
     "splashBackgroundColor": "#0f172a",
     "subtitle": "Verify NFT authenticity",
     "description": "Verify artwork ownership and authenticity on Base blockchain. Scan QR codes or NFC tags to instantly confirm NFT provenance.",
