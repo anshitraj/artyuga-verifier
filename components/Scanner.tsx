@@ -22,30 +22,38 @@ export function Scanner({ mode, onScan }: ScannerProps) {
     if (qrCodeRef.current) {
       try {
         await qrCodeRef.current.stop();
-        qrCodeRef.current.clear();
-        qrCodeRef.current = null;
-        setScanning(false);
       } catch (err) {
         console.error("Error stopping QR scan", err);
-        // Force cleanup even if stop fails
+      } finally {
+        try {
+          if (qrCodeRef.current) {
+            qrCodeRef.current.clear();
+          }
+        } catch (e) {
+          console.error("Error clearing QR scanner", e);
+        }
         qrCodeRef.current = null;
         setScanning(false);
       }
+    } else {
+      setScanning(false);
     }
-    // Stop all active video tracks from any source
+    
+    // Stop all active video tracks from any source (fallback cleanup)
     if (typeof navigator !== "undefined" && navigator.mediaDevices) {
       try {
-        // Get all media tracks and stop them
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        // This is a fallback - html5-qrcode should handle it, but just in case
-        const tracks = document.querySelectorAll('video').forEach(video => {
+        document.querySelectorAll('video').forEach(video => {
           if (video.srcObject) {
             const stream = video.srcObject as MediaStream;
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(track => {
+              track.stop();
+            });
+            video.srcObject = null;
           }
         });
       } catch (e) {
-        // Ignore errors
+        // Ignore cleanup errors
+        console.debug("Cleanup error (non-critical):", e);
       }
     }
   }, []);
@@ -54,6 +62,12 @@ export function Scanner({ mode, onScan }: ScannerProps) {
     if (scanning || qrCodeRef.current) return;
 
     try {
+      // Check if camera is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Camera access is not available. Please check your browser permissions.");
+        return;
+      }
+
       const html5QrCode = new Html5Qrcode(scannerId.current);
       qrCodeRef.current = html5QrCode;
 
@@ -62,27 +76,41 @@ export function Scanner({ mode, onScan }: ScannerProps) {
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },
+          aspectRatio: 1.0,
         },
         (decodedText) => {
-          onScan(decodedText);
-          // Stop immediately after scan
-          if (qrCodeRef.current) {
-            qrCodeRef.current.stop().catch(() => {}).finally(() => {
-              if (qrCodeRef.current) {
-                qrCodeRef.current.clear();
-                qrCodeRef.current = null;
-              }
-              setScanning(false);
-            });
-          }
+          // Stop immediately after successful scan
+          stopQrScan().then(() => {
+            onScan(decodedText);
+          }).catch(() => {
+            // Even if stop fails, proceed with scan result
+            onScan(decodedText);
+          });
         },
         (errorMessage) => {
-          // Ignore scanning errors
+          // Ignore scanning errors (they're expected during scanning)
+          // Only log if it's a critical error
+          if (errorMessage && !errorMessage.includes("NotFoundException")) {
+            console.debug("QR scan:", errorMessage);
+          }
         }
       );
       setScanning(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error("QR scan error", err);
+      setScanning(false);
+      // Provide user-friendly error messages
+      if (err?.name === "NotAllowedError" || err?.message?.includes("permission")) {
+        alert("Camera permission denied. Please allow camera access and try again.");
+      } else if (err?.name === "NotFoundError" || err?.message?.includes("camera")) {
+        alert("No camera found. Please ensure your device has a camera.");
+      } else {
+        alert("Failed to start QR scanner. Please try again.");
+      }
+      // Clean up on error
+      if (qrCodeRef.current) {
+        qrCodeRef.current = null;
+      }
     }
   };
 
@@ -153,33 +181,79 @@ export function Scanner({ mode, onScan }: ScannerProps) {
       setNfcStatus("NFC not supported on this device.");
       return;
     }
+    
+    // Check if we're in a secure context (HTTPS or localhost)
+    if (typeof window !== "undefined" && !window.isSecureContext) {
+      setNfcStatus("NFC requires a secure context (HTTPS or localhost).");
+      return;
+    }
+
     try {
       // @ts-ignore - Web NFC types not in TS by default
       const reader = new NDEFReader();
+      
+      // Set up error handler
+      // @ts-ignore
+      reader.onerror = (event: any) => {
+        console.error("NFC error:", event);
+        setNfcStatus("NFC scan error. Please try again.");
+      };
+
       await reader.scan();
       setNfcStatus("Tap your phone to the NFC tag…");
+      
       // @ts-ignore
       reader.onreading = (event: any) => {
         try {
           const message = event.message;
+          if (!message || !message.records || message.records.length === 0) {
+            setNfcStatus("No data found on NFC tag.");
+            return;
+          }
+          
           for (const record of message.records) {
             if (record.recordType === "text") {
               const textDecoder = new TextDecoder(record.encoding || "utf-8");
               const url = textDecoder.decode(record.data);
               setNfcStatus("NFC tag read successfully.");
               onScan(url);
+              // Stop scanning after successful read
+              try {
+                // @ts-ignore
+                reader.onreading = null;
+              } catch (e) {
+                // Ignore cleanup errors
+              }
+              return;
+            } else if (record.recordType === "url") {
+              // Also handle URL records
+              const url = new TextDecoder().decode(record.data);
+              setNfcStatus("NFC tag read successfully.");
+              onScan(url);
+              try {
+                // @ts-ignore
+                reader.onreading = null;
+              } catch (e) {
+                // Ignore cleanup errors
+              }
               return;
             }
           }
-          setNfcStatus("No text record found on NFC tag.");
+          setNfcStatus("No text or URL record found on NFC tag.");
         } catch (e) {
-          console.error(e);
-          setNfcStatus("Failed to read NFC tag.");
+          console.error("Error reading NFC tag:", e);
+          setNfcStatus("Failed to read NFC tag data.");
         }
       };
-    } catch (e) {
-      console.error(e);
-      setNfcStatus("Error starting NFC scan.");
+    } catch (e: any) {
+      console.error("NFC scan error:", e);
+      if (e?.name === "NotAllowedError" || e?.message?.includes("permission")) {
+        setNfcStatus("NFC permission denied. Please allow NFC access.");
+      } else if (e?.name === "NotSupportedError") {
+        setNfcStatus("NFC not supported on this device.");
+      } else {
+        setNfcStatus(`Error starting NFC scan: ${e?.message || "Unknown error"}`);
+      }
     }
   };
 

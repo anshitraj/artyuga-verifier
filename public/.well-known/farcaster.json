@@ -8,7 +8,7 @@
     "ownerAddress": "0x0CF70E448ac98689e326bd79075a96CcBcec1665"
   },
   "miniapp": {
-    "version": "1.0.0",
+    "version": "1",
     "name": "Artyuga Verifier",
     "homeUrl": "https://verify.artyug.art",
     "iconUrl": "https://verify.artyug.art/icon.png",
