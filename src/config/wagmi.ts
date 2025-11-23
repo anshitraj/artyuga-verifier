@@ -1,15 +1,18 @@
 import { http, createConfig } from 'wagmi';
 import { base, baseSepolia } from 'wagmi/chains';
 import { injected, walletConnect } from 'wagmi/connectors';
+import { farcasterMiniApp } from '@farcaster/miniapp-wagmi-connector';
 
 // WalletConnect project ID - get from https://cloud.walletconnect.com
-// For Base/Farcaster, injected() connector works with Base wallet
 const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'artyuga-verifier';
 
 export const config = createConfig({
   chains: [base, baseSepolia],
   connectors: [
-    // Injected connector works with Base wallet in Farcaster/Base Mini Apps
+    // Farcaster Mini App connector - works in Farcaster environment
+    // This connector uses sdk.wallet.getEthereumProvider() internally
+    farcasterMiniApp(),
+    // Injected connector for Base app and standalone browsers
     injected({
       shimDisconnect: true,
     }),

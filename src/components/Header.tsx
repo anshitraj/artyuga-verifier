@@ -2,59 +2,50 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { Button } from './ui/button';
 import { Wallet } from 'lucide-react';
 import { isFarcaster } from '@/utils/environment';
-import { sdk } from '@farcaster/miniapp-sdk';
+import { toast } from 'sonner';
 
 export const Header = () => {
   const { address, isConnected } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
+  const inFarcaster = isFarcaster();
 
   const handleConnect = async () => {
-    const inFarcaster = isFarcaster();
-    
     if (inFarcaster) {
-      // In Farcaster Mini Apps, Base wallet is available as injected provider
-      // The wallet is injected by the Farcaster app itself
+      // In Farcaster, use the Farcaster Mini App connector
+      // This connector uses sdk.wallet.getEthereumProvider() internally
       try {
-        // First, try to find the injected connector (Base wallet in Farcaster)
-        const injectedConnector = connectors.find((c) => c.id === 'injected');
+        // Find the Farcaster Mini App connector
+        const farcasterConnector = connectors.find((c) => 
+          c.id === 'farcasterMiniApp' || 
+          c.name?.toLowerCase().includes('farcaster')
+        );
         
+        if (farcasterConnector) {
+          // Use Farcaster Mini App connector
+          await connect({ connector: farcasterConnector });
+          return;
+        }
+        
+        // Fallback: try injected connector (should work in Farcaster too)
+        const injectedConnector = connectors.find((c) => c.id === 'injected');
         if (injectedConnector) {
-          // In Farcaster, the injected provider should be Base wallet
           await connect({ connector: injectedConnector });
           return;
         }
         
-        // If injected not found, try WalletConnect as fallback
-        const walletConnectConnector = connectors.find((c) => c.id === 'walletConnect');
-        if (walletConnectConnector) {
-          await connect({ connector: walletConnectConnector });
-          return;
-        }
-        
-        // Last resort: try any available connector
+        // Last resort: try first available connector
         if (connectors.length > 0) {
           await connect({ connector: connectors[0] });
-          return;
         }
-        
-        throw new Error('No wallet connector available');
       } catch (error: any) {
         console.error('Failed to connect wallet in Farcaster:', error);
-        // Show user-friendly error
+        // User rejection is fine, don't show error
         if (error.message?.includes('User rejected') || error.code === 4001) {
-          // User rejected, don't show error toast
           return;
         }
-        // For other errors, try one more time with injected
-        const injectedConnector = connectors.find((c) => c.id === 'injected');
-        if (injectedConnector) {
-          try {
-            await connect({ connector: injectedConnector });
-          } catch (fallbackError) {
-            console.error('Fallback connection failed:', fallbackError);
-          }
-        }
+        // For other errors, show user-friendly message
+        toast.error('Failed to connect wallet. Please try again.');
       }
     } else {
       // In Base app or standalone browser, use standard wallet connection
