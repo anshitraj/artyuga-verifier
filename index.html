@@ -2,31 +2,67 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+
     <!-- REQUIRED BY BASE MINI APP -->
     <meta property="og:card" content="app" />
-    
-    <!-- Recommended OG metadata -->
+
+    <!-- Base Mini App Embed Metadata (IMPORTANT FOR EMBED TOOL) -->
+    <meta
+      name="fc:miniapp"
+      content='{
+        "version": "1",
+        "imageUrl": "https://verify.artyug.art/og-image.png",
+        "button": {
+          "title": "Verify Artwork",
+          "action": {
+            "type": "launch_frame",
+            "url": "https://verify.artyug.art"
+          }
+        }
+      }'
+    />
+
+    <!-- Standard OG Metadata -->
     <meta property="og:title" content="Artyuga Verifier" />
-    <meta property="og:description" content="Scan QR or NFC to verify artwork authenticity on Base." />
-    <meta property="og:image" content="https://verify.artyug.art/icon.png" />
+    <meta
+      property="og:description"
+      content="Scan QR or NFC to verify artwork authenticity on Base."
+    />
+    <meta
+      property="og:image"
+      content="https://verify.artyug.art/og-image.png"
+    />
     <meta property="og:url" content="https://verify.artyug.art" />
     <meta property="og:type" content="website" />
-    
-    <!-- Standard meta tags -->
+
+    <!-- Standard Meta Tags -->
     <title>Artyuga Verifier</title>
-    <meta name="description" content="Scan QR or NFC to verify artwork authenticity on Base." />
-    
-    <!-- Twitter Card -->
+    <meta
+      name="description"
+      content="Scan QR or NFC to verify artwork authenticity on Base."
+    />
+
+    <!-- Twitter Metadata -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Artyuga Verifier" />
-    <meta name="twitter:description" content="Scan QR or NFC to verify artwork authenticity on Base." />
-    <meta name="twitter:image" content="https://verify.artyug.art/icon.png" />
+    <meta
+      name="twitter:description"
+      content="Scan QR or NFC to verify artwork authenticity on Base."
+    />
+    <meta
+      name="twitter:image"
+      content="https://verify.artyug.art/og-image.png"
+    />
   </head>
 
   <body>
     <div id="root"></div>
+
+    <!-- Vite Entry Script -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
