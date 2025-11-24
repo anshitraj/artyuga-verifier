@@ -40,8 +40,9 @@ export default function Result() {
     if (mode === 'mock') {
       const shopId = searchParams.get('shopId') || '';
       const artId = searchParams.get('artId') || '';
+      const originalUrl = searchParams.get('originalUrl') || undefined;
 
-      fetchMockArtwork(shopId, artId)
+      fetchMockArtwork(shopId, artId, originalUrl)
         .then((data) => {
           setMockData(data);
           setLoading(false);

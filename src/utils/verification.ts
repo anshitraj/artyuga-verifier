@@ -125,24 +125,86 @@ export interface MockArtwork {
   txHash: string;
 }
 
+/**
+ * Extracts marketplace URL from a verification URL
+ * @param verificationUrl - The scanned URL
+ * @returns The marketplace base URL
+ */
+function extractMarketplaceUrl(verificationUrl?: string): string {
+  // If a verification URL was provided, extract the origin
+  if (verificationUrl) {
+    try {
+      const url = new URL(verificationUrl);
+      return `${url.protocol}//${url.host}`;
+    } catch {
+      // Invalid URL, fall through to defaults
+    }
+  }
+  
+  // Try environment variable first
+  if (import.meta.env.VITE_MARKETPLACE_URL) {
+    return import.meta.env.VITE_MARKETPLACE_URL;
+  }
+  
+  // Default to localhost for development
+  return 'http://localhost:3000';
+}
+
 export async function fetchMockArtwork(
   shopId: string,
-  artId: string
+  artId: string,
+  verificationUrl?: string
 ): Promise<MockArtwork> {
-  // Simulate API call - in production this would call your actual API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        artId,
-        title: artId === '3' ? 'Sunset Dreams' : `Artwork #${artId}`,
-        artist: 'Aman',
-        shopName: shopId === '1' ? "Aman's Studio" : `Shop ${shopId}`,
-        owner: '0xMock...Owner123',
-        price: '0.05',
-        network: 'Base (Demo)',
-        verified: true,
-        txHash: '0xDEMO1234567890abcdef',
-      });
-    }, 500);
-  });
+  // Get marketplace URL from the verification URL or env
+  const marketplaceUrl = extractMarketplaceUrl(verificationUrl);
+  
+  try {
+    const apiUrl = `${marketplaceUrl}/api/verify/mock?shopId=${shopId}&artId=${artId}`;
+    console.log('Fetching artwork from:', apiUrl);
+    
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Add CORS mode for cross-origin requests
+      mode: 'cors',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch artwork: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Fetched artwork data:', data);
+    
+    // Ensure the data matches MockArtwork interface
+    return {
+      artId: data.artId || artId,
+      title: data.title || `Artwork #${artId}`,
+      artist: data.artist || data.shopName || 'Unknown Artist',
+      shopName: data.shopName || `Shop ${shopId}`,
+      owner: data.owner || '0xUnknown...',
+      price: data.price || '0.00 ETH',
+      network: data.network || 'Base (Demo)',
+      verified: data.verified !== false, // Default to true
+      txHash: data.txHash || '0xDEMO1234567890abcdef',
+    };
+  } catch (error) {
+    console.error('Error fetching artwork from marketplace:', error);
+    console.log('Falling back to local mock data');
+    
+    // Fallback to local mock data if API fails
+    return {
+      artId,
+      title: `Artwork #${artId}`,
+      artist: 'Unknown Artist',
+      shopName: `Shop ${shopId}`,
+      owner: '0xMock...Owner123',
+      price: '0.05 ETH',
+      network: 'Base (Demo)',
+      verified: true,
+      txHash: '0xDEMO1234567890abcdef',
+    };
+  }
 }

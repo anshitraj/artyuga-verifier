@@ -34,6 +34,8 @@ export default function Index() {
     const params = new URLSearchParams({
       mode: parsed.type,
       ...parsed.params,
+      // Store the original URL for API fetching
+      originalUrl: result,
     });
 
     navigate(`/result?${params.toString()}`);
