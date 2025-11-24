@@ -7,26 +7,16 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
 
-    <!-- REQUIRED BY BASE MINI APP -->
+    <!-- REQUIRED FOR BASE MINI APPS -->
     <meta property="og:card" content="app" />
 
-    <!-- Base Mini App Embed Metadata (IMPORTANT FOR EMBED TOOL) -->
+    <!-- ✅ BASE MINIAPP EMBED (FULLY VALID WITH REQUIRED name FIELD) -->
     <meta
       name="fc:miniapp"
-      content='{
-        "version": "1",
-        "imageUrl": "https://verify.artyug.art/og-image.png",
-        "button": {
-          "title": "Verify Artwork",
-          "action": {
-            "type": "launch_frame",
-            "url": "https://verify.artyug.art"
-          }
-        }
-      }'
+      content='{"version":"1","imageUrl":"https://verify.artyug.art/og-image.png","button":{"title":"Verify Artwork","action":{"type":"launch_frame","name":"open","url":"https://verify.artyug.art"}}}'
     />
 
-    <!-- Standard OG Metadata -->
+    <!-- OPTIONAL BUT GOOD FOR SEO + SHARING -->
     <meta property="og:title" content="Artyuga Verifier" />
     <meta
       property="og:description"
@@ -39,14 +29,13 @@
     <meta property="og:url" content="https://verify.artyug.art" />
     <meta property="og:type" content="website" />
 
-    <!-- Standard Meta Tags -->
     <title>Artyuga Verifier</title>
     <meta
       name="description"
       content="Scan QR or NFC to verify artwork authenticity on Base."
     />
 
-    <!-- Twitter Metadata -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Artyuga Verifier" />
     <meta
@@ -62,7 +51,7 @@
   <body>
     <div id="root"></div>
 
-    <!-- Vite Entry Script -->
+    <!-- Vite entry point -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
